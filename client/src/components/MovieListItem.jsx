@@ -6,10 +6,19 @@ class MovieListItem extends React.Component {
     super(props);
   }
 
+  // WHEN PASSING A FUNCTION FROM THE MAIN COMPONENT FRONT END THAT TAKES AN ARGUMENT MUST WRAP IT IN AN ANONYMOUS FUNCTION!!! DOESNT MATTER IF BOUND OR NOT
   render() {
     // console.log(this.props.movie, "checking movie passed");
     return (
-      <div>
+      <div
+        onClick={() => {
+          if (this.props.showFaves) {
+            this.props.delete(this.props.movie);
+          } else {
+            this.props.save(this.props.movie);
+          }
+        }}
+      >
         <li className="movie_item">
           <img src={imageUrl + this.props.movie.poster_path} />
           <div className="movie_description">

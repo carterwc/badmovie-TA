@@ -20,7 +20,7 @@ class App extends React.Component {
 
     this.getMovies = this.getMovies.bind(this);
     this.saveMovie = this.saveMovie.bind(this);
-    this.deleteMovie = this.getMovies.bind(this);
+    this.deleteMovie = this.deleteMovie.bind(this);
     this.swapFavorites = this.swapFavorites.bind(this);
   }
 
@@ -44,11 +44,48 @@ class App extends React.Component {
     // make an axios request to your server on the GET SEARCH endpoint
   }
 
-  saveMovie() {
+  saveMovie(movieToSave) {
+    console.log("i got clicked! here is the movie", movieToSave);
+    axios
+      .post("/save", movieToSave)
+      .then(res => {
+        console.log(res.data, "we saved this movie");
+        // IT IS IMPOSSIBLE TO PUSH INSIDE OF STATE THATS WHY YOU MUST SET A VAR TO SOMETHING, PUSH INTO IT AND THEN SETSTATE TO THE VAR
+        let oldFaves = this.state.favorites;
+        oldFaves.push(movieToSave);
+        this.setState({
+          favorites: oldFaves
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
     // same as above but do something diff
   }
 
-  deleteMovie() {
+  deleteMovie(movieToDelete) {
+    console.log("Deleted movie", movieToDelete);
+    axios
+      .post("/delete", movieToDelete)
+      .then(res => {
+        console.log(res.data, "delete data response");
+        var newFavesArray = this.state.favorites.filter( function (item, index, arr){
+          if (item !== movieToDelete) {
+            return true;
+          } else {
+            return false;
+          }
+        })
+        let newFaves = this.state.favorites;
+        // newFaves.delete(movieToDelete);
+        this.setState({
+          favorites: newFaves
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      });
     // same as above but do something diff
   }
 
@@ -79,6 +116,8 @@ class App extends React.Component {
             movies={
               this.state.showFaves ? this.state.favorites : this.state.movies
             }
+            delete={this.deleteMovie}
+            save={this.saveMovie}
             showFaves={this.state.showFaves}
           />
         </div>

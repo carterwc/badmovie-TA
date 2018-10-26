@@ -17,7 +17,14 @@ class Movies extends React.Component {
       <ul className="movies">
         {/* Make this list dynamic! */}
         {this.props.movies.map(movie => {
-          return <MovieListItem movie={movie} />;
+          return (
+            <MovieListItem
+              delete={this.props.delete}
+              showFaves={this.props.showFaves}
+              movie={movie}
+              save={this.props.save}
+            />
+          );
           // console.log(movie, 'checking each movie')
         })}
       </ul>

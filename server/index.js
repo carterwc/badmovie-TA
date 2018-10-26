@@ -3,9 +3,9 @@ var bodyParser = require("body-parser");
 var request = require("request");
 var app = express();
 var axios = require("axios");
-const { searchMovies } = require("./helpers/apiHelpers.js");
-const { getGenres } = require("./helpers/apiHelpers.js");
-
+const { searchMovies, getGenres } = require("./helpers/apiHelpers.js");
+// is this a thing?
+var { saveMovie, deleteMovie } = require("./../db/sql/index.js");
 //Helpers
 var apiHelpers = require("./helpers/apiHelpers.js");
 
@@ -59,9 +59,31 @@ app.get("/genres", function(req, res) {
   // send back
 });
 
-app.post("/save", function(req, res) {});
+app.post("/save", function(req, res) {
+  let movie = req.body;
+  saveMovie(movie, function(error, data) {
+    if (error) {
+      console.log(error);
+    } else {
+      res.send(data);
+    }
+  });
+});
 
-app.post("/delete", function(req, res) {});
+app.post("/delete", function(req, res) {
+  console.log(req.body, "db side");
+
+  let movie = req.body;
+  deleteMovie(movie, function(error, data) {
+    console.log(data, "db data on server");
+    if (error) {
+      console.log(error);
+    } else {
+      res.send(data);
+      // if no error from the server we are sending back the fact that we deleted the movie from the favorites and can let the client know but MUST send back something to the front end
+    }
+  });
+});
 
 //OPTION 2: Use Express Router
 //IF you decide to go with this option delete OPTION 1 to continue
