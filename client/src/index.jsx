@@ -70,17 +70,20 @@ class App extends React.Component {
       .post("/delete", movieToDelete)
       .then(res => {
         console.log(res.data, "delete data response");
-        var newFavesArray = this.state.favorites.filter( function (item, index, arr){
+        let newFaves = this.state.favorites;
+        console.log('new faves', newFaves)
+        var newFavesArray = newFaves.filter( function (item, index, arr){
           if (item !== movieToDelete) {
             return true;
           } else {
             return false;
           }
         })
-        let newFaves = this.state.favorites;
+        console.log('again whats faves array?', newFavesArray)
+        console.log('last call for newfaves...obj??', newFaves)
         // newFaves.delete(movieToDelete);
         this.setState({
-          favorites: newFaves
+          favorites: newFavesArray
         });
       })
       .catch(error => {
